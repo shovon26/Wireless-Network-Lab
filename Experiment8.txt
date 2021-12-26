@@ -1,0 +1,127 @@
+Lab 8 : Switch configuration
+
+Switch enabling :: 
+
+Switch>en
+Switch#vlan daabase
+              ^
+% Invalid input detected at '^' marker.
+	
+Switch#vlan database
+% Warning: It is recommended to configure VLAN from config mode,
+  as VLAN database mode is being deprecated. Please consult user
+  documentation for configuring VTP/VLAN in config mode.
+
+Switch(vlan)#vlan 10 name A
+VLAN 10 added:
+    Name: A
+Switch(vlan)#vlan 20 name B
+VLAN 20 added:
+    Name: B
+Switch(vlan)#vlan 30 name C
+VLAN 30 added:
+    Name: C
+Switch(vlan)#exit
+APPLY completed.
+Exiting....
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/1-6
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#exit
+Switch(config)#int range fa0/7-14
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#exit
+Switch(config)#int range fa0/15-23
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#exit
+Switch(config)#int fa0/24
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#end
+Switch#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Switch#sh vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/24, Gig0/1, Gig0/2
+10   A                                active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6
+20   B                                active    Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+30   C                                active    Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int vlan 10
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+Switch(config-if)#ip add 192.168.2.2 255.255.255.0
+Switch(config-if)#no shut
+Switch(config-if)#exit
+Switch(config)#int vlan 20
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan20, changed state to up
+
+Switch(config-if)#ip add 192.168.3.2 255.255.255.0
+Switch(config-if)#no shut
+Switch(config-if)#exit
+Switch(config)#int vlan 30
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan30, changed state to up
+
+Switch(config-if)#ip add 192.168.4.2 255.255.255.0
+Switch(config-if)#no shut
+Switch(config-if)#exit
+Switch(config)#ip dhcp pool 10
+Switch(dhcp-config)#network 192.168.2.0 255.255.255.0
+Switch(dhcp-config)#default-router 192.168.2.1
+Switch(dhcp-config)#exit
+Switch(config)#ip dhcp pool 20
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan20, changed state to up
+
+Switch(config-if)#ip add 192.168.3.2 255.255.255.0
+Switch(config-if)#no shut
+Switch(config-if)#exit
+Switch(config)#int vlan 30
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan30, changed state to up
+
+Switch(config-if)#ip add 192.168.4.2 255.255.255.0
+Switch(config-if)#no shut
+Switch(config-if)#exit
+Switch(config)#ip dhcp pool 10
+Switch(dhcp-config)#network 192.168.2.0 255.255.255.0
+Switch(dhcp-config)#default-router 192.168.2.1
+Switch(dhcp-config)#exit
+Switch(config)#ip dhcp pool 20
+Switch(dhcp-config)#network 192.168.3.0 255.255.255.0
+Switch(dhcp-config)#default-router 192.168.3.1
+Switch(dhcp-config)#exit
+Switch(config)#ip dhcp pool 30
+Switch(dhcp-config)#network 192.168.4.0 255.255.255.0
+Switch(dhcp-config)#default-router 192.168.4.1
+Switch(dhcp-config)#exit
+Switch(config)#int fa0/24
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#int vlan 1
+Switch(config-if)#ip add 192.168.100.2 255.255.255.0
+Switch(config-if)#no shut
+
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+Switch(config-if)#
+Switch(config-if)#exit
+Switch(config)#
